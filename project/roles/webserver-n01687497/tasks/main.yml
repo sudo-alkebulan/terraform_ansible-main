@@ -1,0 +1,19 @@
+---
+# tasks file for roles/webserver-n01687497
+
+- name: Install Apache
+  ansible.builtin.yum:
+    name: httpd
+    state: present
+
+- name: Start and enable Apache
+  ansible.builtin.service:
+    name: httpd
+    state: started
+    enabled: true
+
+- name: Copy specific website file to /var/www/html/index.html
+  ansible.builtin.copy:
+    src: "files/{{ hostvars[inventory_hostname].vm_file }}"
+    dest: /var/www/html/index.html
+  when: hostvars[inventory_hostname].vm_file is defined
